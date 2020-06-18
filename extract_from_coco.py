@@ -77,7 +77,9 @@ def save_labelme(image_info, anns, images_dir: pathlib.Path, output_dir: pathlib
     with open(image_path, 'rb') as image_file:
         image_data = base64.b64encode(image_file.read()).decode()
 
-    ## eekkk! does this mean a bad ann somewhere!
+    # warning(will.brennan):
+    # currently we're only handling 'segmentation' being points... 
+    # maybe use pycocotools despite it not working on windows...
     anns = [ann for ann in anns if len(ann['segmentation']) >= 1 and isinstance(ann['segmentation'], list)]
     shapes = [ann_to_shape(ann) for ann in anns]
 
