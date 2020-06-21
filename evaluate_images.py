@@ -7,7 +7,8 @@ import cv2
 import torch
 from torchvision import transforms
 
-from semantic_segmentation import FCNResNet101
+from semantic_segmentation import models
+from semantic_segmentation import load_model
 from semantic_segmentation import draw_results
 
 
@@ -15,6 +16,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--images', type=str, required=True)
     parser.add_argument('--model', type=str, required=True)
+
+    parser.add_argument('--model-type', type=str, choices=models, required=True)
 
     parser.add_argument('--threshold', type=float, default=0.5)
 
@@ -51,10 +54,11 @@ if __name__ == '__main__':
 
     assert args.display or args.save
 
-    logging.info(f'loading model from {args.model}')
-    model = FCNResNet101.load(torch.load(args.model))
+    logging.info(f'loading {args.model_type} from {args.model}')
+    model = load_model(models[args.model_type], torch.load(args.model))
     model.cuda().eval()
 
+    logging.info(f'evaluating images from {args.images}')
     image_dir = pathlib.Path(args.images)
 
     fn_image_transform = transforms.Compose(
