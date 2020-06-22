@@ -1,8 +1,11 @@
 # Semantic Segmentation
 ## Overview
-This project started as a replacement to the [Skin Detection](https://github.com/WillBrennan/SkinDetector) project that used traditional computer vision techniques. This project fine-tunes `fcn_resnet101_coco` from torchvision on masks annotated using labelme. As labelme annotations allow for multiple categories per a pixel we use multi-label semantic segmentation. 
+This project started as a replacement to the [Skin Detection](https://github.com/WillBrennan/SkinDetector) project that used traditional computer vision techniques. This project implements two models, 
 
-Currently this project is optimized for accuracy over being real-time, if people want a real-time segmentation network then make an issue letting me know!
+- `fcn_resnet101_coco` from torchvision for accurate segmentation
+- `BiSeNetV2` for real-time segmentation
+
+These models are trained with masks from labelme annotations. As labelme annotations allow for multiple categories per a pixel we use multi-label semantic segmentation. Both the accurate and real-time models are in the pretrained directory.
 
 ## Getting Started
 This project uses conda to manage its enviroment; once conda is installed we create the enviroment and activate it, 
@@ -10,7 +13,7 @@ This project uses conda to manage its enviroment; once conda is installed we cre
 conda env create -f enviroment.yml
 conda activate semantic_segmentation
 ```
-. On windows powershell needs to be initialised and the execution policy needs to be modified. 
+. On windows; powershell needs to be initialised and the execution policy needs to be modified. 
 ```bash
 conda init powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -20,10 +23,20 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 This project comes bundled with several pretrained models, which can be found in the `pretrained` directory. To infer segmentation masks on your images run `evaluate_images`.
 ```bash
 # to display the output
-python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_skin_30.pth --display
+python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_skin_30.pth --model-type FCNResNet101 --display
 # to save the output
-python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_skin_30.pth --save
+python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_skin_30.pth --model-type FCNResNet101 --save
 ```
+
+To run the real-time models change the `--model-type`, 
+```bash
+# to display the output
+python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_realtime_skin_30.pth --model-type BiSeNetV2 --display
+# to save the output
+python evaluate_images.py --images ~/Pictures/ --model pretrained/model_segmentation_realtime_skin_30.pth --model-type BiSeNetV2 --save
+```
+
+
 ### Skin Segmentation
 This model was trained with a custom dataset of 150 images taken from COCO where skin segmentation annotations were added. This includes a wide variety of skin colours and lighting conditions making it more robust than the [Skin Detection](https://github.com/WillBrennan/SkinDetector) project. This model detects, 
 
@@ -67,13 +80,13 @@ python check_dataset.py --dataset ~/datasets/my_cat_images_val --use-augmentatio
 . If your happy with the images and how they'll appear in training then train the model using, 
 
 ```bash
-python train.py --train ~/datasets/my_cat_images_train --val ~/datasets/my_cat_images_val --model-tag segmentation_cat
+python train.py --train ~/datasets/my_cat_images_train --val ~/datasets/my_cat_images_val --model-tag segmentation_cat --model-type FCNResNet101
 ```
 . This may take some time depending on how many images you have. Tensorboard logs are available in the `logs` directory. To run your trained model on a directory of images run
 
 ```bash
 # to display the output
-python evaluate_images.py --images ~/Pictures/my_cat_imgs --model models/model_segmentation_cat_30.pth --display
+python evaluate_images.py --images ~/Pictures/my_cat_imgs --model models/model_segmentation_cat_30.pth --model-type FCNResNet101 --display 
 # to save the output
-python evaluate_images.py --images ~/Pictures/my_cat_imgs --model models/model_segmentation_cat_30.pth --save
+python evaluate_images.py --images ~/Pictures/my_cat_imgs --model models/model_segmentation_cat_30.pth --model-type FCNResNet101 --save
 ```

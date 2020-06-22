@@ -11,7 +11,7 @@ from torch.utils import tensorboard
 
 from semantic_segmentation import LabelMeDataset
 from semantic_segmentation import create_data_loaders
-from semantic_segmentation import FCNResNet101
+from semantic_segmentation import models
 from semantic_segmentation import LossWithAux
 from semantic_segmentation import attach_lr_scheduler
 from semantic_segmentation import attach_training_logger
@@ -27,6 +27,8 @@ def parse_args():
     parser.add_argument('--train', type=str, required=True)
     parser.add_argument('--val', type=str, required=True)
     parser.add_argument('--model-tag', type=str, required=True)
+
+    parser.add_argument('--model-type', type=str, choices=models, required=True)
 
     parser.add_argument('--debug', action='store_true')
 
@@ -56,8 +58,8 @@ if __name__ == '__main__':
         batch_size=args.batch_size,
     )
 
-    logging.info(f'creating model and optimizer with initial lr of {args.initial_lr}')
-    model = FCNResNet101(train_dataset.categories)
+    logging.info(f'creating {args.model_type} and optimizer with initial lr of {args.initial_lr}')
+    model = models[args.model_type](train_dataset.categories)
     model = nn.DataParallel(model).cuda()
     optimizer = optim.RMSprop(params=[p for p in model.parameters() if p.requires_grad], lr=args.initial_lr)
 

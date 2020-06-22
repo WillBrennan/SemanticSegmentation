@@ -1,4 +1,4 @@
-from semantic_segmentation import FCNResNet101
+from semantic_segmentation.models import FCNResNet101
 
 import torch
 

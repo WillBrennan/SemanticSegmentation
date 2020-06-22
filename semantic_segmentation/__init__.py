@@ -1,8 +1,9 @@
 from .dataset import LabelMeDataset
 from .dataloaders import create_data_loaders
 
-from .model import FCNResNet101
-from .model import LossWithAux
+from .models import models
+from .models import load_model
+from .models import LossWithAux
 
 from .engines import attach_lr_scheduler
 from .engines import attach_training_logger

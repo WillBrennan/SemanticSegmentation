@@ -6,17 +6,6 @@ from torchvision import models
 
 
 class FCNResNet101(nn.Module):
-    @staticmethod
-    def load(state_dict):
-        # todo(will.brennan) - improve this... might want to save a categories file with this instead
-        category_prefix = '_categories.'
-        categories = [k for k in state_dict.keys() if k.startswith(category_prefix)]
-        categories = [k[len(category_prefix):] for k in categories]
-
-        model = FCNResNet101(categories)
-        model.load_state_dict(state_dict)
-        return model
-
     def __init__(self, categories):
         super().__init__()
         logging.info(f'creating model with categories: {categories}')
@@ -35,15 +24,3 @@ class FCNResNet101(nn.Module):
 
     def forward(self, image: torch.Tensor):
         return self.model(image)
-
-
-class LossWithAux(nn.Module):
-    def __init__(self, loss_fn: nn.Module):
-        super().__init__()
-        self.loss_fn = loss_fn
-
-    def forward(self, y_pred, y):
-        loss_output = self.loss_fn(y_pred['out'], y)
-        loss_aux = self.loss_fn(y_pred['aux'], y)
-
-        return loss_output + 0.5 * loss_aux
