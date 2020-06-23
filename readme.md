@@ -8,7 +8,12 @@ This project started as a replacement to the [Skin Detection](https://github.com
 These models are trained with masks from labelme annotations. As labelme annotations allow for multiple categories per a pixel we use multi-label semantic segmentation. Both the accurate and real-time models are in the pretrained directory.
 
 ## Getting Started
-This project uses conda to manage its enviroment; once conda is installed we create the enviroment and activate it, 
+The pretrained models are stored in the repo with git-lfs, when you clone make sure you've pulled the files by calling, 
+
+```bash
+git lfs pull
+```
+ or by downloading them from github directly. This project uses conda to manage its enviroment; once conda is installed we create the enviroment and activate it, 
 ```bash
 conda env create -f enviroment.yml
 conda activate semantic_segmentation
