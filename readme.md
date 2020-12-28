@@ -2,7 +2,7 @@
 ## Overview
 This project started as a replacement to the [Skin Detection](https://github.com/WillBrennan/SkinDetector) project that used traditional computer vision techniques. This project implements two models, 
 
-- `fcn_resnet101_coco` from torchvision for accurate segmentation
+- `FCNResNet101` from torchvision for accurate segmentation
 - `BiSeNetV2` for real-time segmentation
 
 These models are trained with masks from labelme annotations. As labelme annotations allow for multiple categories per a pixel we use multi-label semantic segmentation. Both the accurate and real-time models are in the pretrained directory.
