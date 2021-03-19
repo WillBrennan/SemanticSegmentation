@@ -3,12 +3,12 @@ channels:
   - pytorch
   - conda-forge
 dependencies:
-  - python==3.7.5
+  - python>=3.7
   - pip
-  - pytorch==1.5
-  - torchvision==0.6.0
-  - cudatoolkit=10.1
-  - numpy==1.16.3
+  - pytorch
+  - torchvision
+  - cudatoolkit>=11.1
+  - numpy
   - pip:
     - pytorch-ignite
     - opencv-python
