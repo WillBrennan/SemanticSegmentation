@@ -52,11 +52,15 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     args = parse_args()
 
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    logging.info(f'running inference on {device}')
+
     assert args.display or args.save
 
     logging.info(f'loading {args.model_type} from {args.model}')
-    model = load_model(models[args.model_type], torch.load(args.model))
-    model.cuda().eval()
+    model = torch.load(args.model, map_location=device)
+    model = load_model(models[args.model_type], model)
+    model.to(device).eval()
 
     logging.info(f'evaluating images from {args.images}')
     image_dir = pathlib.Path(args.images)
@@ -75,7 +79,7 @@ if __name__ == '__main__':
         image = fn_image_transform(image_file)
 
         with torch.no_grad():
-            image = image.cuda().unsqueeze(0)
+            image = image.to(device).unsqueeze(0)
             results = model(image)['out']
             results = torch.sigmoid(results)
 
