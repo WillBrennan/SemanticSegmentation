@@ -60,7 +60,7 @@ def attach_metric_logger(
         message = ''
         for metric_name, metric_value in metrics.items():
             writer.add_scalar(f'{data_name}/mean_{metric_name}', metric_value, engine.state.epoch)
-            message += f'{metric_name}: {metric_value:.3f} '
+            message += f'{data_name}_{metric_name}: {metric_value:.3f} '
 
         logging.info(message)
 
