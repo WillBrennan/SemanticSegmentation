@@ -93,14 +93,14 @@ if __name__ == '__main__':
                                                                 Green_value={args.Green_value},
                                                                 Blue_value={args.Blue_value}):
             if args.save:
-                output_name = f'results_{category}_{image_file.name}'
+                output_name = f'VikramsOutput_{category}_{image_file.name}'
                 logging.info(f'writing output to {output_name}')
                 cv2.imwrite(str(output_name), category_image)
                 cv2.imwrite(f'mask_{category}_{image_file.name}', mask_image)
 
             if args.display:
                 cv2.imshow(category, category_image)
-                cv2.imshow(f'mask_{category}', mask_image)
+                cv2.imshow(f'ExtractedSkin_{category}', mask_image)
 
         if args.display:
             if cv2.waitKey(0) == ord('q'):
