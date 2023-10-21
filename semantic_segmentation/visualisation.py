@@ -54,11 +54,15 @@ def draw_results(
 
             #cat_colour = colours[0]
             cat_colour = numpy.array(colours)
-            print(cat_colour)
-            cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
+            
 
             mask_image = image.copy()
             mask_image[~category_mask] = 0
 
-            yield category, cat_image, mask_image
+            cat_image[category_mask] = cat_colour
+
+
+            out_image = cv2.addWeighted(cat_image, 0.5, image, 0.5, 0)
+
+            yield category, out_image, mask_image
 
