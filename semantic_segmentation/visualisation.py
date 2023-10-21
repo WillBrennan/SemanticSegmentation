@@ -52,8 +52,8 @@ def draw_results(
         for label, (category, category_mask) in enumerate(zip(categories, mask)):
             cat_image = image.copy()
 
-            cat_colour = colours[0]
-            cat_colour = numpy.array(cat_colour)
+            #cat_colour = colours[0]
+            cat_colour = numpy.array(colours)
             print(cat_colour)
             cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
 
