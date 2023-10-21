@@ -30,7 +30,7 @@ def draw_results(
 
     mask = mask.cpu().numpy()
 
-    if Red_value==0 & Green_value==0 & Blue_value==0:
+    if Red_value==0 and Green_value==0 and Blue_value==0:
         colours = (
             (0, 0, 255), (0, 255, 0), (255, 0, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255), (0, 128, 255),
             (0, 255, 128), (128, 0, 255)
@@ -48,11 +48,13 @@ def draw_results(
 
             yield category, cat_image, mask_image
     else:
+        colours = (int(list(Blue_value)[0]), int(list(Green_value)[0]), int(list(Red_value)[0]))
         for label, (category, category_mask) in enumerate(zip(categories, mask)):
-            cat_image = image.copy(Blue_value,Green_value,Red_value)
+            cat_image = image.copy()
 
-            cat_colour = ()
+            cat_colour = colours[0]
             cat_colour = numpy.array(cat_colour)
+            print(cat_colour)
             cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
 
             mask_image = image.copy()
