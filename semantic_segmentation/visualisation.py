@@ -12,7 +12,10 @@ def draw_results(
     mask: torch.Tensor,
     categories: List[str],
     img_mean=(0.485, 0.456, 0.406),
-    img_std=(0.229, 0.224, 0.225)
+    img_std=(0.229, 0.224, 0.225),
+    Red_value=0,
+    Green_value=0,
+    Blue_value=0
 ):
     assert mask.shape[0] == len(categories)
     assert image.shape[1:] == mask.shape[1:]
@@ -27,19 +30,33 @@ def draw_results(
 
     mask = mask.cpu().numpy()
 
-    colours = (
-        (0, 0, 255), (0, 255, 0), (255, 0, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255), (0, 128, 255),
-        (0, 255, 128), (128, 0, 255)
-    )
+    if Red_value==0 & Green_value==0 & Blue_value==0:
+        colours = (
+            (0, 0, 255), (0, 255, 0), (255, 0, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255), (0, 128, 255),
+            (0, 255, 128), (128, 0, 255)
+        )
 
-    for label, (category, category_mask) in enumerate(zip(categories, mask)):
-        cat_image = image.copy()
+        for label, (category, category_mask) in enumerate(zip(categories, mask)):
+            cat_image = image.copy()
 
-        cat_colour = colours[label % len(colours)]
-        cat_colour = numpy.array(cat_colour)
-        cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
+            cat_colour = colours[label % len(colours)]
+            cat_colour = numpy.array(cat_colour)
+            cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
 
-        mask_image = image.copy()
-        mask_image[~category_mask] = 0
+            mask_image = image.copy()
+            mask_image[~category_mask] = 0
 
-        yield category, cat_image, mask_image
+            yield category, cat_image, mask_image
+    else:
+        for label, (category, category_mask) in enumerate(zip(categories, mask)):
+            cat_image = image.copy(Blue_value,Green_value,Red_value)
+
+            cat_colour = ()
+            cat_colour = numpy.array(cat_colour)
+            cat_image[category_mask] = 0.5 * cat_image[category_mask] + 0.5 * cat_colour
+
+            mask_image = image.copy()
+            mask_image[~category_mask] = 0
+
+            yield category, cat_image, mask_image
+

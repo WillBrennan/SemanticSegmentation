@@ -23,6 +23,9 @@ def parse_args():
 
     parser.add_argument('--save', action='store_true')
     parser.add_argument('--display', action='store_true')
+    parser.add_argument('--Red_value', action='store_true', required=True)
+    parser.add_argument('--Green_value', action='store_true', required=True)
+    parser.add_argument('--Blue_value', action='store_true', required=True)
 
     return parser.parse_args()
 
@@ -85,7 +88,10 @@ if __name__ == '__main__':
 
             results = results > args.threshold
 
-        for category, category_image, mask_image in draw_results(image[0], results[0], categories=model.categories):
+        for category, category_image, mask_image in draw_results(image[0], results[0], categories=model.categories,
+                                                                Red_value,
+                                                                Green_value,
+                                                                Blue_value):
             if args.save:
                 output_name = f'results_{category}_{image_file.name}'
                 logging.info(f'writing output to {output_name}')
